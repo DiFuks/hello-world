@@ -1,12 +1,14 @@
-import { Body, Controller, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 
 import { UserCreator } from '@app/user/services/UserCreator';
 import { UserCreateDto } from '@app/user/dto/UserCreateDto';
 import { User } from '@app/user/entities/User';
 import { UserUpdater } from '@app/user/services/UserUpdater';
 import { UserUpdateDto } from '@app/user/dto/UserUpdateDto';
+import { AuthGuard } from '@app/user/guards/AuthGuard';
 
 @Controller('/user')
+@UseGuards(new AuthGuard())
 export class UserController {
   constructor(
     private readonly userCreator: UserCreator,
