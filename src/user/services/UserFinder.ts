@@ -13,4 +13,8 @@ export class UserFinder {
   public findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
+
+  public findById(id: number): Promise<User | undefined> {
+    return this.userRepository.findOne(id);
+  }
 }

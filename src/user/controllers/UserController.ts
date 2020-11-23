@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post, UseFilters,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 
 import { UserCreator } from '@app/user/services/UserCreator';
 import { UserCreateDto } from '@app/user/dto/UserCreateDto';
@@ -8,10 +19,12 @@ import { UserUpdateDto } from '@app/user/dto/UserUpdateDto';
 import { AuthGuard } from '@app/user/guards/AuthGuard';
 import { UserFinder } from '@app/user/services/UserFinder';
 import { FormatResponse } from '@app/user/interceptors/FormatResponse';
+import { HttpExceptionFilter } from '@app/user/exceptionFilters/HttpExceptionFilter';
 
 @Controller('/user')
 @UseGuards(new AuthGuard())
 @UseInterceptors(new FormatResponse())
+@UseFilters(new HttpExceptionFilter())
 export class UserController {
   constructor(
     private readonly userCreator: UserCreator,
@@ -35,5 +48,16 @@ export class UserController {
   @Get()
   public findAll(): Promise<User[]> {
     return this.userFinder.findAll();
+  }
+
+  @Get(':id')
+  public async findById(@Param('id', ParseIntPipe) id: number): Promise<User> {
+    const user = await this.userFinder.findById(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 }
