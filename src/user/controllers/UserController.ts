@@ -7,7 +7,6 @@ import {
   ParseIntPipe,
   Patch,
   Post, UseFilters,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 
@@ -20,9 +19,10 @@ import { AuthGuard } from '@app/user/guards/AuthGuard';
 import { UserFinder } from '@app/user/services/UserFinder';
 import { FormatResponse } from '@app/user/interceptors/FormatResponse';
 import { HttpExceptionFilter } from '@app/user/exceptionFilters/HttpExceptionFilter';
+import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('/user')
-@UseGuards(new AuthGuard())
+// @UseGuards(new AuthGuard())
 @UseInterceptors(new FormatResponse())
 @UseFilters(new HttpExceptionFilter())
 export class UserController {
@@ -33,11 +33,13 @@ export class UserController {
   ) {}
 
   @Post()
+  @ApiCreatedResponse({ type: User })
   public create(@Body() dto: UserCreateDto): Promise<User> {
     return this.userCreator.create(dto);
   }
 
   @Patch(':id')
+  @ApiCreatedResponse({ type: User })
   public update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UserUpdateDto,
@@ -46,11 +48,13 @@ export class UserController {
   }
 
   @Get()
+  @ApiOkResponse({ type: User, isArray: true })
   public findAll(): Promise<User[]> {
     return this.userFinder.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: User })
   public async getById(@Param('id', ParseIntPipe) id: number): Promise<User> {
     const user = await this.userFinder.findById(id);
 
