@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from '@app/user/UserModule';
+import { RedisModule } from 'nestjs-redis';
 
 @Module({
   imports: [
@@ -15,6 +16,10 @@ import { UserModule } from '@app/user/UserModule';
       synchronize: true,
       namingStrategy: new SnakeNamingStrategy(),
       entities: ["src/**/entities/*.ts"],
+    }),
+    RedisModule.register({
+      host: 'localhost',
+      port: 6379,
     }),
     UserModule,
   ],

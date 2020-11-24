@@ -2,7 +2,8 @@
   "name": "hello-world",
   "scripts": {
     "prod": "ts-node -r tsconfig-paths/register src/main.ts",
-    "dev": "nodemon --config nodemon.json"
+    "dev": "nodemon --config nodemon.json",
+    "clear-cache": "docker exec -it redis redis-cli FLUSHALL"
   },
   "dependencies": {
     "@nestjs/common": "^7.5.5",
@@ -11,6 +12,7 @@
     "@nestjs/typeorm": "^7.1.5",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
+    "nestjs-redis": "^1.2.8",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.6.3",

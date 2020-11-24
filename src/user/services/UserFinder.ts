@@ -1,20 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
 import { User } from '@app/user/entities/User';
-import { InjectRepository } from '@nestjs/typeorm';
+import { UserRepo } from '@app/user/repositories/UserRepo';
 
 @Injectable()
 export class UserFinder {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userRepo: UserRepo,
   ) {}
 
   public findAll(): Promise<User[]> {
-    return this.userRepository.find();
+    return this.userRepo.findAll();
   }
 
   public findById(id: number): Promise<User | undefined> {
-    return this.userRepository.findOne(id);
+    return this.userRepo.findById(id);
   }
 }

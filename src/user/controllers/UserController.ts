@@ -51,7 +51,7 @@ export class UserController {
   }
 
   @Get(':id')
-  public async findById(@Param('id', ParseIntPipe) id: number): Promise<User> {
+  public async getById(@Param('id', ParseIntPipe) id: number): Promise<User> {
     const user = await this.userFinder.findById(id);
 
     if (!user) {
