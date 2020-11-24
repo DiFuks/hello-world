@@ -23,10 +23,9 @@ export class CacheService {
       return;
     }
 
-    const parsedData = JSON.parse(data);
-
-    console.log(`Get data from redis with key ${key}:`, parsedData);
-
-    return parsedData;
+    return JSON.parse(data);
   }
 }
+
+
+

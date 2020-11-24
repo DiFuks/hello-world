@@ -1,7 +1,7 @@
 import {
   Body,
   Controller,
-  Get,
+  Get, HttpStatus,
   NotFoundException,
   Param,
   ParseIntPipe,
@@ -19,12 +19,15 @@ import { AuthGuard } from '@app/user/guards/AuthGuard';
 import { UserFinder } from '@app/user/services/UserFinder';
 import { FormatResponse } from '@app/user/interceptors/FormatResponse';
 import { HttpExceptionFilter } from '@app/user/exceptionFilters/HttpExceptionFilter';
-import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiExtraModels, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBaseResponse } from '@app/user/decorators/ApiBaseResponse';
+import { BaseResponse } from '@app/user/dto/BaseResponse';
 
 @Controller('/user')
 // @UseGuards(new AuthGuard())
 @UseInterceptors(new FormatResponse())
 @UseFilters(new HttpExceptionFilter())
+@ApiExtraModels(BaseResponse)
 export class UserController {
   constructor(
     private readonly userCreator: UserCreator,
@@ -33,13 +36,13 @@ export class UserController {
   ) {}
 
   @Post()
-  @ApiCreatedResponse({ type: User })
+  @ApiBaseResponse(User, { status: HttpStatus.CREATED })
   public create(@Body() dto: UserCreateDto): Promise<User> {
     return this.userCreator.create(dto);
   }
 
   @Patch(':id')
-  @ApiCreatedResponse({ type: User })
+  @ApiBaseResponse(User, { status: HttpStatus.CREATED })
   public update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UserUpdateDto,
@@ -48,13 +51,13 @@ export class UserController {
   }
 
   @Get()
-  @ApiOkResponse({ type: User, isArray: true })
+  @ApiBaseResponse(User, { status: HttpStatus.OK, isArray: true })
   public findAll(): Promise<User[]> {
     return this.userFinder.findAll();
   }
 
   @Get(':id')
-  @ApiOkResponse({ type: User })
+  @ApiBaseResponse(User, { status: HttpStatus.OK })
   public async getById(@Param('id', ParseIntPipe) id: number): Promise<User> {
     const user = await this.userFinder.findById(id);
 
