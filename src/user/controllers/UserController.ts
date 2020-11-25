@@ -27,7 +27,7 @@ import { BaseResponse } from '@app/user/dto/BaseResponse';
 // @UseGuards(new AuthGuard())
 @UseInterceptors(new FormatResponse())
 @UseFilters(new HttpExceptionFilter())
-@ApiExtraModels(BaseResponse)
+@ApiExtraModels(BaseResponse, User)
 export class UserController {
   constructor(
     private readonly userCreator: UserCreator,

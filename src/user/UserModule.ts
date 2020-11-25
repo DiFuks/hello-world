@@ -7,7 +7,7 @@ import { UserFactory } from '@app/user/factories/UserFactory';
 import { UserController } from '@app/user/controllers/UserController';
 import { UserUpdater } from '@app/user/services/UserUpdater';
 import { UserFinder } from '@app/user/services/UserFinder';
-import { LoggerMiddleware } from '@app/user/middlawares/LoggerMiddleware';
+import { LoggerMiddleware } from '@app/user/middlewares/LoggerMiddleware';
 import { UserRepo } from '@app/user/repositories/UserRepo';
 import { CacheModule } from '@app/cache/CacheModule';
 
